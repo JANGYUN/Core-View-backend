@@ -1,32 +1,27 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const { sessionMiddleware, isLoggedIn } = require('../middleware/authmiddleware');
 const authRouter = require('./authRouter');
 const profileRouter = require('./profileRouter');
-
 const virtualCompilerRouter = require('./virtualCompilerRouter');
 const signUpRouter = require("./signUpRouter");
 const loginRouter = require("./loginRouter");
 const mypageRouter = require("./mypageRouter");
 
+dotenv.config({ path: path.resolve(__dirname, './.env') });
+require('../../config/passport-setup');
 
-require('../../config/passport-setup'); // 경로 수정
-require('dotenv').config({ path: './src/routes/.env' });
-
-dotenv.config();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());

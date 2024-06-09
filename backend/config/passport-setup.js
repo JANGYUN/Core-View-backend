@@ -1,9 +1,13 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const dotenv = require('dotenv');
+const path = require('path');
 const pool = require('./databaseSet');
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../src/routes/.env') });
+
+console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
+console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET);
 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
